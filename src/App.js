@@ -669,7 +669,7 @@ function App() {
   return (
     <div className="App">
       
-      { currentAccount &&
+      { currentAccount ?
       <header>
         <div className="container">
           <div className="header-left">
@@ -691,6 +691,9 @@ function App() {
             }
           </div>
         </div>
+      </header>:
+      <header>
+        <div className="container"></div>
       </header>
       }
 
