@@ -395,7 +395,20 @@ function App() {
       );
     }
     return (
-      renderNotConnectedContainer()
+      <div className="top-wrapper">
+        <div className="container">
+          <h1 className="top-text">Juicy VOICE</h1>
+          <h1 className="top-text">お耳の恋人</h1>
+          <div className="btn-wrapper">
+            <button
+              onClick={connectWallet}
+              className="cta-button connect-wallet-button mar"
+            >
+              こちらからウォレットを接続してください
+            </button>
+          </div>
+        </div>
+      </div>
     )
   };
 
