@@ -669,6 +669,7 @@ function App() {
   return (
     <div className="App">
       
+      { currentAccount &&
       <header>
         <div className="container">
           <div className="header-left">
@@ -691,6 +692,7 @@ function App() {
           </div>
         </div>
       </header>
+      }
 
       <div  className="pages-for-second-pages">
 
