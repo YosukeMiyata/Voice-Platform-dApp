@@ -37,6 +37,13 @@ a {
   font-size: 24px;
 }
 
+.top-wrapper h2 {
+  opacity: 0.7;
+  font-size: 45px;
+  letter-spacing: 5px;
+  font-size: 24px;
+}
+
 .top-wrapper p {
   opacity: 0.7;
 }
