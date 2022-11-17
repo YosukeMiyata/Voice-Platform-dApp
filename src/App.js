@@ -693,7 +693,14 @@ function App() {
         </div>
       </header>:
       <header>
-        <div className="container"></div>
+        <div className="container">
+          <div className="header-left">
+            <img heght="45px" width="45px" alt="Twitter Logo" className="logo" src={footerLogoImage} />
+          </div>
+          <div className="header-left">
+            <p className="header-title">Juicy Voice</p>
+          </div>
+        </div>
       </header>
       }
 
