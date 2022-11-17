@@ -379,8 +379,8 @@ function App() {
     return (
       <div className="top-wrapper">
         <div className="container">
-          <h1>Juicy VOICE</h1>
-          <h2>お耳の恋人</h2>
+          <h1 className="top-text2">Juicy VOICE</h1>
+          <h2 className="top-text2">お耳の恋人</h2>
           <div className="btn-wrapper">
             <button
               onClick={connectWallet}
