@@ -414,6 +414,7 @@ function App() {
 
   // 最初のページ。医療従事者と患者で振り分けて、ページの表示を決める
   const renderGlobalTimeLineContainer = () => {
+    getAllVoices();
     return (
       <div>
         <h1>新着ボイス　一覧</h1>
