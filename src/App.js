@@ -212,12 +212,12 @@ function App() {
       const account = accounts[0];
       console.log('Found an authorized account:', account);
 
-      //ボイスオブジェクト配列を設定
-      getAllVoices();
-
     } else {
       console.log('No authorized account found');
     }
+
+    //ボイスオブジェクト配列を設定
+    getAllVoices();
 
     // ユーザーのネットワークのチェーンIDをチェックします。
     const chainId = await ethereum.request({ method: 'eth_chainId' });
