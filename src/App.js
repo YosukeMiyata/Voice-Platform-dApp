@@ -364,24 +364,6 @@ function App() {
   //チップを送るボタンが押された時に呼ばれる関数
   const tip = async (num) => {}
 
-  // レンダリング関数です。
-  const renderNotConnectedContainer = () => (
-    <div className="top-wrapper">
-      <div className="container">
-        <h1 className="top-text">Juicy VOICE</h1>
-        <h1 className="top-text">お耳の恋人</h1>
-        <div className="btn-wrapper">
-          <button
-            onClick={connectWallet}
-            className="cta-button connect-wallet-button mar"
-          >
-            こちらからウォレットを接続してください
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
   // 最初のページ。医療従事者と患者で振り分けて、ページの表示を決める
   const renderFirstPage = () => {
     // Polygon Mumbai Testnet上にいない場合、switchボタンをレンダリングします。
@@ -394,7 +376,22 @@ function App() {
         </div>
       );
     }
-    renderNotConnectedContainer();
+    return (
+      <div className="top-wrapper">
+        <div className="container">
+          <h1 className="top-text">Juicy VOICE</h1>
+          <h1 className="top-text">お耳の恋人</h1>
+          <div className="btn-wrapper">
+            <button
+              onClick={connectWallet}
+              className="cta-button connect-wallet-button mar"
+            >
+              こちらからウォレットを接続してください
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   };
 
   // 最初のページ。医療従事者と患者で振り分けて、ページの表示を決める
