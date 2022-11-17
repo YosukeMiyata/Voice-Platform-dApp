@@ -356,7 +356,81 @@ function App() {
   };
 
   //ライクされた時に呼ばれる関数
-  const like = async (num) => {}
+  const like = async ( num ) => {
+
+    setIsLoadingValue( true );
+    
+    const { ethereum } = window;
+
+    try {
+      if (ethereum) {
+        
+        const provider = new ETHERS.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const VPContract = new ETHERS.Contract(CONTRACT_ADDRESS, ABI, signer);
+        
+        const likeTxn = await VPContract.like( num, {
+          gasLimit: 300000,
+        });
+        console.log("Liking...", likeTxn.hash);
+        await likeTxn.wait();
+        console.log("Liked -- ", likeTxn.hash);
+        
+      } else {
+        console.log("Ethereum object doesn't exist!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    setIsLoadingValue( false );
+
+  };
+
+  //コントラクトのNewLikeイベントから送られてきたデータを受け取り、処理する
+  useEffect(() => {
+    
+    let VPContract;
+
+    const onNewLike = (id, totallikes, flagCompleted ) => {
+      console.log("NewLike", id, totallikes, flagCompleted);
+      
+      if(flagCompleted){
+        
+        const theid = id.toNumber();
+        
+        //新しいライク数を特定のオブジェクトのtotallikesにセットする
+        setAllVoices( (oldVoices) => {
+            return oldVoices.map((oldVoice, id) => {
+              if (id === theid) {
+                return { ...oldVoice, totallikes: totallikes };
+              }
+              return oldVoice;
+            });
+          }
+        );
+      }else{
+        alert("ライクに失敗しました");
+      }
+      
+    };
+
+    /* NewLikeイベントがコントラクトから発信されたときに、情報を受け取ります */
+    if (window.ethereum) {
+      
+      const provider = new ETHERS.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      VPContract = new ETHERS.Contract(CONTRACT_ADDRESS, ABI, signer);
+      
+      VPContract.on("NewLike", onNewLike);
+    }
+    /*メモリリークを防ぐために、NewLikeのイベントを解除します*/
+    return () => {
+      if (VPContract) {
+        VPContract.off("NewLike", onNewLike);
+      }
+    };
+  }, []);
 
   //コメントするボタンが押された時に呼ばれる関数
   const comment = async (num) => {}
@@ -411,20 +485,23 @@ function App() {
                   className="indivisual-voice"
                 >
                   <div>{voice.username}:{voice.gender}　　　　ジャンル: {voice.genre}</div>
-                  <div>タイトル: {voice.title}</div>
+                  <div>{voice.title}</div>
                   <audio controls src={voice.voice}></audio>
                   <div className="display-left">
                     <div className="margin-right">
-                      <button className='cta-button4 connect-wallet-button3' onClick={ () => like(voice.id.toNumber()) }>
-                        いいね！👍 {voice.totallikes.toNumber()}
-                      </button>
+                      { !isLoadingValue ? 
+                        <button className='cta-button4 connect-wallet-button3' onClick={ () => like(voice.id.toNumber()) }>
+                          いいね！👍 {voice.totallikes.toNumber()}
+                        </button>: 
+                        <ColorRing/>
+                      }
                     </div>
                     <div className="margin-right">
                       <button className='cta-button4 connect-wallet-button3' onClick={ () => comment(voice.id.toNumber()) }>
                         コメントをする
                       </button>
                     </div>
-                    {/*<div className="margin-right">
+                    <div className="margin-right">
                       <form onSubmit={handleSubmit(tip)} className="formBox">
                         <div className="example">
                           <input type="text" name="name" id="namelabel" placeholder="チップの額を入力"></input>
@@ -434,7 +511,7 @@ function App() {
                           <button type="submit" className="cta-button4 connect-wallet-button3" >チップを送る</button>
                         </div>  
                       </form>
-                    </div>*/}
+                    </div>
                   </div>
                   {/*<div>Address: {voice.address}</div>
                   <div>Time: {voice.timestamp.toString()}</div>
@@ -577,7 +654,7 @@ function App() {
               </td>
             </tr>
             <tr>
-              <th><label htmlFor="description">詳細</label></th>
+              <th><label htmlFor="description">メッセージ</label></th>
               <td className="form-table-not-marge">
                 <textarea id="form-container-name2" {...register('description', { required: false })} placeholder="" />
               </td>
@@ -704,9 +781,10 @@ function App() {
       </header>
       }
 
+      { !currentAccount && renderFirstPage()}
+
       <div  className="pages-for-second-pages">
 
-        { !currentAccount && renderFirstPage()}
         {/* グローバルタイムラインをレンダリングします。 */}
         { currentAccount && !postModeValue && renderGlobalTimeLineContainer()}
         {/* ボイス投稿ボタンが押された時の投稿フォームをレンダリングします。 */}
