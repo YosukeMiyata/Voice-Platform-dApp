@@ -212,12 +212,12 @@ function App() {
       const account = accounts[0];
       console.log('Found an authorized account:', account);
 
+      //ボイスオブジェクト配列を設定
+      getAllVoices();
+
     } else {
       console.log('No authorized account found');
     }
-
-    //ボイスオブジェクト配列を設定
-    getAllVoices();
 
     // ユーザーのネットワークのチェーンIDをチェックします。
     const chainId = await ethereum.request({ method: 'eth_chainId' });
@@ -364,23 +364,23 @@ function App() {
   //チップを送るボタンが押された時に呼ばれる関数
   const tip = async (num) => {}
 
-  /*// レンダリング関数です。
+  // レンダリング関数です。
   const renderNotConnectedContainer = () => (
     <div className="top-wrapper">
       <div className="container">
-        <h1 className="top-text">ECS VOICE</h1>
-        <h1 className="top-text">分散型医療データベース</h1>
+        <h1 className="top-text">Juicy VOICE</h1>
+        <h1 className="top-text">お耳の恋人</h1>
         <div className="btn-wrapper">
           <button
             onClick={connectWallet}
             className="cta-button connect-wallet-button mar"
           >
-            患者様はこちらからウォレットを接続してください
+            こちらからウォレットを接続してください
           </button>
         </div>
       </div>
     </div>
-  );*/
+  );
 
   // 最初のページ。医療従事者と患者で振り分けて、ページの表示を決める
   const renderFirstPage = () => {
@@ -394,6 +394,13 @@ function App() {
         </div>
       );
     }
+    return (
+      renderNotConnectedContainer()
+    )
+  };
+
+  // 最初のページ。医療従事者と患者で振り分けて、ページの表示を決める
+  const renderGlobalTimeLineContainer = () => {
     return (
       <div>
         <h1>新着ボイス　一覧</h1>
@@ -691,10 +698,11 @@ function App() {
 
       <div  className="pages-for-second-pages">
 
+        { !currentAccount && renderFirstPage()}
         {/* グローバルタイムラインをレンダリングします。 */}
-        {!postModeValue && renderFirstPage()}
+        { currentAccount && !postModeValue && renderGlobalTimeLineContainer()}
         {/* ボイス投稿ボタンが押された時の投稿フォームをレンダリングします。 */}
-        {postModeValue && renderPostVoiceContainer()}
+        { currentAccount && postModeValue && renderPostVoiceContainer()}
 
       </div>
 
