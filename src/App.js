@@ -394,9 +394,7 @@ function App() {
         </div>
       );
     }
-    return (
-      {renderNotConnectedContainer}
-    )
+    renderNotConnectedContainer();
   };
 
   // 最初のページ。医療従事者と患者で振り分けて、ページの表示を決める
